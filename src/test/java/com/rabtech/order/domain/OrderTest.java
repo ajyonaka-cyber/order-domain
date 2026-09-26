@@ -5,6 +5,7 @@ import com.rabtech.order.domain.event.OrderConfirmed;
 import com.rabtech.order.domain.event.PaymentRecorded;
 import org.junit.jupiter.api.Test;
 
+
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
