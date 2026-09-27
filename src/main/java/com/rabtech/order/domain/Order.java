@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class Order {
 
@@ -18,9 +19,16 @@ public class Order {
     private final List<OrderLine> lines = new ArrayList<>();
     private final List<DomainEvent> events = new ArrayList<>();
 
+    private final Supplier<Instant> timeProvider;
+
     public Order() {
+        this(Instant::now);
+    }
+
+    public Order(Supplier<Instant> timeProvider) {
         this.id = UUID.randomUUID();
         this.status = OrderStatus.DRAFT;
+        this.timeProvider = timeProvider;
     }
 
     public UUID getId() {
@@ -59,7 +67,7 @@ public class Order {
         events.add(
                 new OrderConfirmed(
                         id.toString(),
-                        Instant.now()
+                        timeProvider.get()
                 )
         );
     }
@@ -74,7 +82,7 @@ public class Order {
         events.add(
                 new PaymentRecorded(
                         id.toString(),
-                        Instant.now()
+                        timeProvider.get()
                 )
         );
     }
@@ -85,18 +93,8 @@ public class Order {
         events.add(
                 new OrderCancelled(
                         id.toString(),
-                        Instant.now()
+                        timeProvider.get()
                 )
         );
     }
 }
-
-
-
-
-
-
-
-
-
-
